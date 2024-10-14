@@ -1,0 +1,58 @@
+<div class="container">
+  <nav class="navbar navbar-dark border border-secondary mb-2 p-3">
+    <form class="form-inline">
+      <button class="btn btn-outline-success" type="button" (click)="openVerticallyCentered(content)">New Position</button>
+    </form>
+    <form class="form-inline">
+      <input id="table-filtering-search" class="form-control" type="text" placeholder="Search" [formControl]="filter" />
+    </form>
+  </nav>
+
+  <div class="container border border-secondary mx-auto p-3">
+    <h2>Open Positions</h2>
+    <table class="table table-striped mt-3">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+        <th scope="col">Description</th>
+        <th scope="col" class="th-lg-9 th-sm-9">Skills</th>
+      </tr>
+      </thead>
+      <tbody>
+      @for (position of filteredPositions$ | async; track position.title; let i = $index) {
+        <tr>
+          <th scope="row">{{position.id}}</th>
+          <td><ngb-highlight [result]="position.title" [term]="filter.value" /></td>
+          <td><ngb-highlight [result]="position.description" [term]="filter.value" /></td>
+          <td>
+            <div class="container">
+              @for (skill of shortSkills(position.skills); track skill.title) {
+                 <span class="badge" [ngClass]="getBadgeStyle(skill.experience)">{{skill.title}}</span>
+                 <span>&nbsp;</span>
+              }
+            </div>
+          </td>
+        </tr>
+      } @empty {
+      <tr>
+        <td colspan="3" style="text-align: center">No positions found</td>
+      </tr>
+      }
+      </tbody>
+    </table>
+  </div>
+</div>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Create new position</h4>
+  </div>
+
+  <div class="modal-body">
+    <app-new-position #NewPositionComponent></app-new-position>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">Close</button>
+    <button type="button" class="btn btn-secondary" (click)="save()">Save</button>
+  </div>
+</ng-template>

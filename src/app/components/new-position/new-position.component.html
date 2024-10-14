@@ -1,0 +1,83 @@
+<div class="row clearfix">
+  <div class="col-lg-12">
+    <form [formGroup]="positionForm" (ngSubmit)="onSubmit()">
+      <div class="container border border-1 p-2 mt-3">
+        <div class="row d-flex justify-content-center">
+          <div class="col-12">
+            <h5>Details</h5>
+            <div class="form-group clearfix p-2">
+              <label for="title" class="col-sm-3 control-label">Title:</label>
+              <div class="col-12">
+                <input id="title" formControlName="title" type="text" class="form-control" required/>
+                @if(positionForm.controls['title'].touched && positionForm.controls['title'].invalid) {
+                  <span class="text-danger">Title is required</span>
+                }
+              </div>
+            </div>
+            <div class="form-group clearfix p-2">
+              <label for="description" class="col-sm-3 control-label">Description:</label>
+              <div class="col-12">
+                <textarea id="description" formControlName="description" class="form-control"></textarea>
+                @if(positionForm.controls['description'].touched && positionForm.controls['description'].invalid) {
+                  <span class="text-danger">Title is required</span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container border border-1 p-2 mt-3">
+        <div class="row">
+          <div class="col-12">
+            <h5>Skills</h5>
+            @if (skills.controls.length >0) {
+              <div formArrayName="skills">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">Skill</th>
+                      <th scope="col">Experience</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (skill of skills.controls; track $index; let i = $index) {
+                      <tr [formGroupName]="i">
+                        <td>
+                          <input id="name_{{i}}" formControlName="name" type="text" />
+                          @if(skillsControls(i, 'name') && skillsControls(i, 'name').touched && skillsControls(i, 'name').invalid) {
+                            <span class="text-danger">Title is required</span>
+                          }
+                        </td>
+                        <td>
+                          <select id="experience_{{i}}" formControlName="experience" class="form-control">
+                            <option value="1">> 10 years</option>
+                            <option value="2">> 5 years</option>
+                            <option value="3">< 5 years</option>
+                          </select>
+                          @if(skillsControls(i,'experience') && skillsControls(i,'experience').touched && skillsControls(i,'experience').invalid) {
+                            <span class="text-danger">Experience is required</span>
+                          }
+                        </td>
+                        <td>
+                          <button type="button" (click)="removeSkill(i)">Eliminar Skill</button>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+            </div>
+            }
+
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <button type="button" class="btn btn-secondary" (click)="addSkill()">Agregar Skill</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
